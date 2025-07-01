@@ -187,6 +187,34 @@
                             started: !1
                         }))
                     };
+                    const handleOnClick = (e) => {
+                        console.log("[Tracker] Click: ", e.clientX, e.clientY);
+                        sendInteraction("click", e.clientX, e.clientY)
+                      };
+                    const handleWheel = (e) => {
+                        console.log("[Tracker] Scroll: ", e.clientX, e.clientY);
+                        sendInteraction("scroll", e.clientX, e.clientY)
+                      }
+                    const handleTouchStart = (e) => {
+                        const t = e.touches[0];
+                        console.log("[Tracker] Touch start: ", t.clientX, t.clientY);
+                        sendInteraction("touchstart", t.clientX, t.clientY);
+                      }
+                    const handleTouchEnd = (e) => {
+                        const t = e.changedTouches[0];
+                        console.log("[Tracker] Touch end: ", t.clientX, t.clientY);
+                        sendInteraction("touchend", t.clientX, t.clientY);
+                      }
+                    const handleTouchMove = (e) => {
+                        if (e.touches.length === 2) {
+                          const [touch1, touch2] = e.touches;
+                          const dx = touch2.clientX - touch1.clientX;
+                          const dy = touch2.clientY - touch1.clientY;
+                          const distance = Math.hypot(dx, dy);
+
+                          console.log("[Tracker] Pinch gesture detected. Distance:", distance);
+                          }
+                      }
                 (0, l.useEffect)(() => (q.started && null === M.current && (M.current = setInterval(() => {
                     F(e => {
                         let s = e.seconds + 1,
@@ -229,6 +257,12 @@
                     y(!1), N(!1)
                 }, [o]), (0, i.jsxs)("main", {
                     className: "flex flex-row p-4 gap-10",
+                    id: "user_interaction",
+                    onClick: handleOnClick,
+                    onWheel: handleWheel,
+                    onTouchStart: handleTouchStart,
+                    onTouchEnd: handleTouchEnd,
+                    onTouchMove: handleTouchMove,
                     children: [(0, i.jsxs)("div", {
                         className: "w-[270px]",
                         children: [(0, i.jsx)("div", {
