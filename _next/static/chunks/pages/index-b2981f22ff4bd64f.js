@@ -8,21 +8,21 @@
             var i = t(7876),
                 l = t(4232);
             let n = e => (0, i.jsx)("svg", {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    width: 32,
-                    height: 32,
-                    viewBox: "0 0 24 24",
-                    fill: "none",
-                    ...e,
-                    children: (0, i.jsx)("path", {
-                        d: "M4 12V8.44c0-4.42 3.13-6.23 6.96-4.02l3.09 1.78 3.09 1.78c3.83 2.21 3.83 5.83 0 8.04l-3.09 1.78-3.09 1.78C7.13 21.79 4 19.98 4 15.56z",
-                        stroke: "#000",
-                        strokeWidth: 1.5,
-                        strokeMiterlimit: 10,
-                        strokeLinecap: "round",
-                        strokeLinejoin: "round"
-                    })
-                }),
+                xmlns: "http://www.w3.org/2000/svg",
+                width: 32,
+                height: 32,
+                viewBox: "0 0 24 24",
+                fill: "none",
+                ...e,
+                children: (0, i.jsx)("path", {
+                    d: "M4 12V8.44c0-4.42 3.13-6.23 6.96-4.02l3.09 1.78 3.09 1.78c3.83 2.21 3.83 5.83 0 8.04l-3.09 1.78-3.09 1.78C7.13 21.79 4 19.98 4 15.56z",
+                    stroke: "#000",
+                    strokeWidth: 1.5,
+                    strokeMiterlimit: 10,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                })
+            }),
                 a = e => (0, i.jsx)("svg", {
                     xmlns: "http://www.w3.org/2000/svg",
                     width: 32,
@@ -47,12 +47,12 @@
                     body: JSON.stringify({
                         time: Date.now() / 1000,
                         data: { type, x, y, ...extra }
-                      })
-                  })
-                .then(response => response.json())
-                .then(result => console.log("send to api successfully: ", result))
-                .catch(err => console.log("Error sending to api: ", err))
-              }
+                    })
+                })
+                    .then(response => response.json())
+                    .then(result => console.log("send to api successfully: ", result))
+                    .catch(err => console.log("Error sending to api: ", err))
+            }
             function c() {
                 let [e, s] = (0, l.useState)({
                     lang: !0,
@@ -62,7 +62,7 @@
                     unit4: !0
                 });
                 (0, l.useEffect)(() => {
-                    !async function() {
+                    !async function () {
                         let e = await localStorage.getItem("settings");
                         e && s(JSON.parse(e))
                     }()
@@ -187,34 +187,56 @@
                             started: !1
                         }))
                     };
-                    const handleOnClick = (e) => {
-                        console.log("[Tracker] Click: ", e.clientX, e.clientY);
-                        sendInteraction("click", e.clientX, e.clientY)
-                      };
-                    const handleWheel = (e) => {
-                        console.log("[Tracker] Scroll: ", e.clientX, e.clientY);
-                        sendInteraction("scroll", e.clientX, e.clientY)
-                      }
-                    const handleTouchStart = (e) => {
-                        const t = e.touches[0];
-                        console.log("[Tracker] Touch start: ", t.clientX, t.clientY);
-                        sendInteraction("touchstart", t.clientX, t.clientY);
-                      }
-                    const handleTouchEnd = (e) => {
-                        const t = e.changedTouches[0];
-                        console.log("[Tracker] Touch end: ", t.clientX, t.clientY);
-                        sendInteraction("touchend", t.clientX, t.clientY);
-                      }
-                    const handleTouchMove = (e) => {
-                        if (e.touches.length === 2) {
-                          const [touch1, touch2] = e.touches;
-                          const dx = touch2.clientX - touch1.clientX;
-                          const dy = touch2.clientY - touch1.clientY;
-                          const distance = Math.hypot(dx, dy);
+                const handleOnClick = (e) => {
+                    const scaleFactor = window.outerHeight / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactor);
+                    const normX = e.clientX * scaleFactor;
+                    const normY = e.clientY * scaleFactor;
+                    console.log("[Tracker] Click: ", normX, normY);
+                    sendInteraction("click", normX, normY)
+                };
+                const handleWheel = (e) => {
+                    const scaleFactor = window.outerHeight / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactor);
+                    const normX = e.clientX * scaleFactor;
+                    const normY = e.clientY * scaleFactor;
+                    console.log("[Tracker] Scroll: ", normX, normY);
+                    sendInteraction("scroll", normX, normY)
+                }
+                const handleTouchStart = (e) => {
+                    const scaleFactor = window.outerHeight / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactor);
+                    const t = e.touches[0];
+                    const normX = t.clientX * scaleFactor;
+                    const normY = t.clientY * scaleFactor;
+                    console.log("[Tracker] Touch start: ", normX, normY);
+                    sendInteraction("touchstart", normX, normY);
+                }
+                const handleTouchEnd = (e) => {
+                    const scaleFactor = window.outerHeight / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactor);
+                    const t = e.changedTouches[0];
+                    const normX = t.clientX * scaleFactor;
+                    const normY = t.clientY * scaleFactor;
+                    console.log("[Tracker] Touch end: ", normX, normY);
+                    sendInteraction("touchend", normX, normY);
+                }
+                const handleTouchMove = (e) => {
+                    const scaleFactor = window.outerHeight / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactor);
+                    if (e.touches.length === 2) {
+                        const [touch1, touch2] = e.touches;
+                        const normX1 = touch1.clientX * scaleFactor;
+                        const normY1 = touch1.clientY * scaleFactor;
+                        const normX2 = touch2.clientX * scaleFactor;
+                        const normY2 = touch2.clientY * scaleFactor;
+                        const dx = normX2 - normX1;
+                        const dy = normY2 - normY1;
+                        const distance = Math.hypot(dx, dy);
 
-                          console.log("[Tracker] Pinch gesture detected. Distance:", distance);
-                          }
-                      }
+                        console.log("[Tracker] Pinch gesture detected. Distance:", distance);
+                    }
+                }
                 (0, l.useEffect)(() => (q.started && null === M.current && (M.current = setInterval(() => {
                     F(e => {
                         let s = e.seconds + 1,
@@ -1632,7 +1654,7 @@
             }
         },
         6760: (e, s, t) => {
-            (window.__NEXT_P = window.__NEXT_P || []).push(["/", function() {
+            (window.__NEXT_P = window.__NEXT_P || []).push(["/", function () {
                 return t(5977)
             }])
         },
@@ -1642,176 +1664,176 @@
                 default: () => l
             });
             let i = {
-                    en: {
-                        parent: "Parent",
-                        days: "days",
-                        growth: "Growth",
-                        weight: "Weight",
-                        length: "Length",
-                        daily_report: "Daily report",
-                        report1: "Weight gained",
-                        report2: "New physical exam appointment scheduled",
-                        title: "How is Emma doing today",
-                        feed: "Feed",
-                        tube: "Tube",
-                        bottle: "Bottle",
-                        breastfeeding: "Breastfeeding",
-                        time: "time",
-                        times: "times",
-                        diaper: "Diaper",
-                        changes_today: "changes today",
-                        wet: "Wet",
-                        dirty: "Dirty",
-                        skin_to_skin: "Skin-to-Skin",
-                        hours_ago: "hours ago",
-                        kangaroo: "Kangaroo",
-                        touching: "Touching",
-                        hrs: "hrs",
-                        min: "min",
-                        body_temperature: "Body Temperature",
-                        heart_rate: "Heart Rate",
-                        beats_per_minute: "Beats per minute",
-                        sp02: "Sp02",
-                        breath_per_minute: "Breath per minute",
-                        oxygen_level: "Oxygen level (%)",
-                        milestone: "Emma’s Milestone",
-                        mile1: "Extubation",
-                        mile2: "Off IV fluids",
-                        mile3: "No apnea\u2028bradycardia event",
-                        mile4: "No extra oxygen",
-                        mile5: "First time being held",
-                        mile6: "First diaper change",
-                        mile7: "First breastfeed",
-                        notes: "Notes",
-                        plan: "Plan",
-                        glossary: "Glossary",
-                        settings: "Settings",
-                        manual_notes: "Manual Notes",
-                        quick_notes: "Quick Notes",
-                        quick1: "Who is involved in making health care decisions for my baby?",
-                        save: "Save",
-                        activity: "Activity",
-                        frequently_asked_terms: "Frequently Asked Terms",
-                        apgar_score: "Apgar Score",
-                        faq1: "A quick assessment performed on a newborn at 1 and 5 minutes after birth to evaluate their physical condition and determine any immediate need for extra medical help.",
-                        jaundice: "Jaundice",
-                        faq2: "A condition caused by an excess of bilirubin in the bloodstream, leading to a yellowing of the skin and eyes in newborns.",
-                        neonatal: "Neonatal",
-                        umbilical_cord: "Umbilical Cord",
-                        meconium: "Meconium",
-                        circumcision: "Circumcision",
-                        hyperbilirubinemia: "Hyperbilirubinemia",
-                        language: "Language",
-                        units: "Units",
-                        french: "French",
-                        english: "English",
-                        inches: "Inches",
-                        centimeter: "Centimeter",
-                        pounds: "Pounds",
-                        grams: "Grams",
-                        ounces: "Ounces",
-                        milliliters: "Milliliters",
-                        success: "Success",
-                        success_text: "Your update has been sent to Emma’s team",
-                        minutes: "minutes",
-                        left: "Left",
-                        right: "Right",
-                        breastfeed: "Breastfeed",
-                        breast_milk: "Breast Milk",
-                        donor_milk: "Donor Milk",
-                        formula: "Formula",
-                        diaper_ask: "Is the care team weighing Emma’s diaper?",
-                        yes: "YES",
-                        no: "NO",
-                        mix: "Mix",
-                        input_activity: "Input Activity"
-                    },
-                    fr: {
-                        parent: "Parent",
-                        days: "jours",
-                        growth: "Croissance",
-                        weight: "Poids",
-                        length: "Taille",
-                        daily_report: "Rapport Quotidien",
-                        report1: "Prise de poids",
-                        report2: "Nouveau rendez-vous pour un examen physique",
-                        title: "Comment va Emma aujourd'hui?",
-                        feed: "Nourrir",
-                        tube: "Tube",
-                        bottle: "Biberon",
-                        breastfeeding: "Allaitement",
-                        time: "time",
-                        times: "fois",
-                        diaper: "Couche",
-                        changes_today: "changements aujourd'hui",
-                        wet: "Mouill\xe9",
-                        dirty: "Sale",
-                        skin_to_skin: "Peau-\xe0-Peau",
-                        hours_ago: "Il y a heures",
-                        kangaroo: "Kangourou",
-                        touching: "Contact",
-                        hrs: "hrs",
-                        min: "min",
-                        body_temperature: "Temp\xe9rature Corporelle",
-                        heart_rate: "Fr\xe9quence Cardiaque",
-                        beats_per_minute: "Battements par minute",
-                        spo2: "SpO2",
-                        breath_per_minute: "Respirations par minute",
-                        oxygen_level: "Taux d'oxyg\xe8ne (%)",
-                        milestone: "L'\xe9tape cl\xe9 d'Emma",
-                        mile1: "Extubation",
-                        mile2: "Arr\xeat des fluides IV",
-                        mile3: "Aucun \xe9v\xe9nement d'apn\xe9e bradycardie",
-                        mile4: "Plus d'oxyg\xe8ne suppl\xe9mentaire",
-                        mile5: "Premi\xe8re fois que l'on tient b\xe9b\xe9",
-                        mile6: "Premier changement de couche",
-                        mile7: "Premier allaitement",
-                        notes: "Notes",
-                        plan: "Plan",
-                        glossary: "Glossaire",
-                        settings: "Param\xe8tres",
-                        manual_notes: "Notes Manuelles",
-                        quick_notes: "Notes Rapides",
-                        quick1: "Qui est impliqu\xe9 dans les d\xe9cisions concernant les soins de sant\xe9 \xe0 fournir \xe0 mon b\xe9b\xe9?",
-                        save: "SAUVEGARDER",
-                        activity: "Activit\xe9",
-                        frequently_asked_terms: "Foire Aux Questions",
-                        apgar_score: "Score d'Apgar",
-                        faq1: "\xc9valuation rapide effectu\xe9e sur un nouveau-n\xe9 1 minute et 5 minutes apr\xe8s la naissance afin d'\xe9valuer son \xe9tat physique et de d\xe9terminer s'il a besoin d'une aide m\xe9dicale suppl\xe9mentaire de fa\xe7on imm\xe9diate.",
-                        jaundice: "Jaunisse",
-                        faq2: "Affection caus\xe9e par un exc\xe8s de bilirubine dans la circulation sanguine, entra\xeenant un jaunissement de la peau et des yeux chez les nouveau-n\xe9s.",
-                        neonatal: "N\xe9onatal",
-                        umbilical_cord: "Cordon Ombilical",
-                        meconium: "M\xe9conium",
-                        circumcision: "Circoncision",
-                        hyperbilirubinemia: "Hyperbilirubin\xe9mie",
-                        language: "Langue",
-                        units: "Unit\xe9s",
-                        french: "Fran\xe7ais",
-                        english: "Anglais",
-                        inches: "Pouces",
-                        centimeter: "Centim\xe8tre",
-                        pounds: "Livres",
-                        grams: "Grammes",
-                        ounces: "Onces",
-                        milliliters: "Millilitres",
-                        success: "Succ\xe8s",
-                        success_text: "Votre mise \xe0 jour a \xe9t\xe9 envoy\xe9e \xe0 l'\xe9quipe d'Emma",
-                        minutes: "minutes",
-                        left: "gauche",
-                        right: "droite",
-                        breastfeed: "Allaiter",
-                        breast_milk: "Lait maternel",
-                        donor_milk: "Lait de donneuse",
-                        formula: "formule",
-                        diaper_ask: "L'\xe9quipe soignante p\xe8se-t-elle la couche d'Emma?",
-                        yes: "OUI",
-                        no: "NON",
-                        mix: "M\xe9lange",
-                        input_activity: "Ajouter Activit\xe9"
-                    }
+                en: {
+                    parent: "Parent",
+                    days: "days",
+                    growth: "Growth",
+                    weight: "Weight",
+                    length: "Length",
+                    daily_report: "Daily report",
+                    report1: "Weight gained",
+                    report2: "New physical exam appointment scheduled",
+                    title: "How is Emma doing today",
+                    feed: "Feed",
+                    tube: "Tube",
+                    bottle: "Bottle",
+                    breastfeeding: "Breastfeeding",
+                    time: "time",
+                    times: "times",
+                    diaper: "Diaper",
+                    changes_today: "changes today",
+                    wet: "Wet",
+                    dirty: "Dirty",
+                    skin_to_skin: "Skin-to-Skin",
+                    hours_ago: "hours ago",
+                    kangaroo: "Kangaroo",
+                    touching: "Touching",
+                    hrs: "hrs",
+                    min: "min",
+                    body_temperature: "Body Temperature",
+                    heart_rate: "Heart Rate",
+                    beats_per_minute: "Beats per minute",
+                    sp02: "Sp02",
+                    breath_per_minute: "Breath per minute",
+                    oxygen_level: "Oxygen level (%)",
+                    milestone: "Emma’s Milestone",
+                    mile1: "Extubation",
+                    mile2: "Off IV fluids",
+                    mile3: "No apnea\u2028bradycardia event",
+                    mile4: "No extra oxygen",
+                    mile5: "First time being held",
+                    mile6: "First diaper change",
+                    mile7: "First breastfeed",
+                    notes: "Notes",
+                    plan: "Plan",
+                    glossary: "Glossary",
+                    settings: "Settings",
+                    manual_notes: "Manual Notes",
+                    quick_notes: "Quick Notes",
+                    quick1: "Who is involved in making health care decisions for my baby?",
+                    save: "Save",
+                    activity: "Activity",
+                    frequently_asked_terms: "Frequently Asked Terms",
+                    apgar_score: "Apgar Score",
+                    faq1: "A quick assessment performed on a newborn at 1 and 5 minutes after birth to evaluate their physical condition and determine any immediate need for extra medical help.",
+                    jaundice: "Jaundice",
+                    faq2: "A condition caused by an excess of bilirubin in the bloodstream, leading to a yellowing of the skin and eyes in newborns.",
+                    neonatal: "Neonatal",
+                    umbilical_cord: "Umbilical Cord",
+                    meconium: "Meconium",
+                    circumcision: "Circumcision",
+                    hyperbilirubinemia: "Hyperbilirubinemia",
+                    language: "Language",
+                    units: "Units",
+                    french: "French",
+                    english: "English",
+                    inches: "Inches",
+                    centimeter: "Centimeter",
+                    pounds: "Pounds",
+                    grams: "Grams",
+                    ounces: "Ounces",
+                    milliliters: "Milliliters",
+                    success: "Success",
+                    success_text: "Your update has been sent to Emma’s team",
+                    minutes: "minutes",
+                    left: "Left",
+                    right: "Right",
+                    breastfeed: "Breastfeed",
+                    breast_milk: "Breast Milk",
+                    donor_milk: "Donor Milk",
+                    formula: "Formula",
+                    diaper_ask: "Is the care team weighing Emma’s diaper?",
+                    yes: "YES",
+                    no: "NO",
+                    mix: "Mix",
+                    input_activity: "Input Activity"
                 },
-                l = function(e) {
+                fr: {
+                    parent: "Parent",
+                    days: "jours",
+                    growth: "Croissance",
+                    weight: "Poids",
+                    length: "Taille",
+                    daily_report: "Rapport Quotidien",
+                    report1: "Prise de poids",
+                    report2: "Nouveau rendez-vous pour un examen physique",
+                    title: "Comment va Emma aujourd'hui?",
+                    feed: "Nourrir",
+                    tube: "Tube",
+                    bottle: "Biberon",
+                    breastfeeding: "Allaitement",
+                    time: "time",
+                    times: "fois",
+                    diaper: "Couche",
+                    changes_today: "changements aujourd'hui",
+                    wet: "Mouill\xe9",
+                    dirty: "Sale",
+                    skin_to_skin: "Peau-\xe0-Peau",
+                    hours_ago: "Il y a heures",
+                    kangaroo: "Kangourou",
+                    touching: "Contact",
+                    hrs: "hrs",
+                    min: "min",
+                    body_temperature: "Temp\xe9rature Corporelle",
+                    heart_rate: "Fr\xe9quence Cardiaque",
+                    beats_per_minute: "Battements par minute",
+                    spo2: "SpO2",
+                    breath_per_minute: "Respirations par minute",
+                    oxygen_level: "Taux d'oxyg\xe8ne (%)",
+                    milestone: "L'\xe9tape cl\xe9 d'Emma",
+                    mile1: "Extubation",
+                    mile2: "Arr\xeat des fluides IV",
+                    mile3: "Aucun \xe9v\xe9nement d'apn\xe9e bradycardie",
+                    mile4: "Plus d'oxyg\xe8ne suppl\xe9mentaire",
+                    mile5: "Premi\xe8re fois que l'on tient b\xe9b\xe9",
+                    mile6: "Premier changement de couche",
+                    mile7: "Premier allaitement",
+                    notes: "Notes",
+                    plan: "Plan",
+                    glossary: "Glossaire",
+                    settings: "Param\xe8tres",
+                    manual_notes: "Notes Manuelles",
+                    quick_notes: "Notes Rapides",
+                    quick1: "Qui est impliqu\xe9 dans les d\xe9cisions concernant les soins de sant\xe9 \xe0 fournir \xe0 mon b\xe9b\xe9?",
+                    save: "SAUVEGARDER",
+                    activity: "Activit\xe9",
+                    frequently_asked_terms: "Foire Aux Questions",
+                    apgar_score: "Score d'Apgar",
+                    faq1: "\xc9valuation rapide effectu\xe9e sur un nouveau-n\xe9 1 minute et 5 minutes apr\xe8s la naissance afin d'\xe9valuer son \xe9tat physique et de d\xe9terminer s'il a besoin d'une aide m\xe9dicale suppl\xe9mentaire de fa\xe7on imm\xe9diate.",
+                    jaundice: "Jaunisse",
+                    faq2: "Affection caus\xe9e par un exc\xe8s de bilirubine dans la circulation sanguine, entra\xeenant un jaunissement de la peau et des yeux chez les nouveau-n\xe9s.",
+                    neonatal: "N\xe9onatal",
+                    umbilical_cord: "Cordon Ombilical",
+                    meconium: "M\xe9conium",
+                    circumcision: "Circoncision",
+                    hyperbilirubinemia: "Hyperbilirubin\xe9mie",
+                    language: "Langue",
+                    units: "Unit\xe9s",
+                    french: "Fran\xe7ais",
+                    english: "Anglais",
+                    inches: "Pouces",
+                    centimeter: "Centim\xe8tre",
+                    pounds: "Livres",
+                    grams: "Grammes",
+                    ounces: "Onces",
+                    milliliters: "Millilitres",
+                    success: "Succ\xe8s",
+                    success_text: "Votre mise \xe0 jour a \xe9t\xe9 envoy\xe9e \xe0 l'\xe9quipe d'Emma",
+                    minutes: "minutes",
+                    left: "gauche",
+                    right: "droite",
+                    breastfeed: "Allaiter",
+                    breast_milk: "Lait maternel",
+                    donor_milk: "Lait de donneuse",
+                    formula: "formule",
+                    diaper_ask: "L'\xe9quipe soignante p\xe8se-t-elle la couche d'Emma?",
+                    yes: "OUI",
+                    no: "NON",
+                    mix: "M\xe9lange",
+                    input_activity: "Ajouter Activit\xe9"
+                }
+            },
+                l = function (e) {
                     let s = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "en";
                     return console.log(e, s, i[s][e]), i[s][e]
                 }
