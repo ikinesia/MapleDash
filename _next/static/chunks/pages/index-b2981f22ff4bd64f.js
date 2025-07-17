@@ -188,48 +188,53 @@
                         }))
                     };
                 const handleOnClick = (e) => {
-                    const scaleFactor = window.outerHeight / window.innerHeight;
-                    console.log("[Tracker] Scale factor: ", scaleFactor);
-                    const normX = e.clientX * scaleFactor;
-                    const normY = e.clientY * scaleFactor;
+                    const scaleFactorX = 1920 / window.innerWidth;
+                    const scaleFactorY = 1080 / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactorX, scaleFactorY);
+                    const normX = e.clientX * scaleFactorX;
+                    const normY = e.clientY * scaleFactorY;
                     console.log("[Tracker] Click: ", normX, normY);
                     sendInteraction("click", normX, normY)
                 };
                 const handleWheel = (e) => {
-                    const scaleFactor = window.outerHeight / window.innerHeight;
-                    console.log("[Tracker] Scale factor: ", scaleFactor);
-                    const normX = e.clientX * scaleFactor;
-                    const normY = e.clientY * scaleFactor;
+                    const scaleFactorX = 1920 / window.innerWidth;
+                    const scaleFactorY = 1080 / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactorX, scaleFactorY);
+                    const normX = e.clientX * scaleFactorX;
+                    const normY = e.clientY * scaleFactorY;
                     console.log("[Tracker] Scroll: ", normX, normY);
                     sendInteraction("scroll", normX, normY)
                 }
                 const handleTouchStart = (e) => {
-                    const scaleFactor = window.outerHeight / window.innerHeight;
-                    console.log("[Tracker] Scale factor: ", scaleFactor);
+                    const scaleFactorX = 1920 / window.innerWidth;
+                    const scaleFactorY = 1080 / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactorX, scaleFactorY);
                     const t = e.touches[0];
-                    const normX = t.clientX * scaleFactor;
-                    const normY = t.clientY * scaleFactor;
+                    const normX = t.clientX * scaleFactorX;
+                    const normY = t.clientY * scaleFactorY;
                     console.log("[Tracker] Touch start: ", normX, normY);
                     sendInteraction("touchstart", normX, normY);
                 }
                 const handleTouchEnd = (e) => {
-                    const scaleFactor = window.outerHeight / window.innerHeight;
-                    console.log("[Tracker] Scale factor: ", scaleFactor);
+                    const scaleFactorX = 1920 / window.innerWidth;
+                    const scaleFactorY = 1080 / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactorX, scaleFactorY);
                     const t = e.changedTouches[0];
-                    const normX = t.clientX * scaleFactor;
-                    const normY = t.clientY * scaleFactor;
+                    const normX = t.clientX * scaleFactorX;
+                    const normY = t.clientY * scaleFactorY;
                     console.log("[Tracker] Touch end: ", normX, normY);
                     sendInteraction("touchend", normX, normY);
                 }
                 const handleTouchMove = (e) => {
-                    const scaleFactor = window.outerHeight / window.innerHeight;
-                    console.log("[Tracker] Scale factor: ", scaleFactor);
+                    const scaleFactorX = 1920 / window.innerWidth;
+                    const scaleFactorY = 1080 / window.innerHeight;
+                    console.log("[Tracker] Scale factor: ", scaleFactorX, scaleFactorY);
                     if (e.touches.length === 2) {
                         const [touch1, touch2] = e.touches;
-                        const normX1 = touch1.clientX * scaleFactor;
-                        const normY1 = touch1.clientY * scaleFactor;
-                        const normX2 = touch2.clientX * scaleFactor;
-                        const normY2 = touch2.clientY * scaleFactor;
+                        const normX1 = touch1.clientX * scaleFactorX;
+                        const normY1 = touch1.clientY * scaleFactorY;
+                        const normX2 = touch2.clientX * scaleFactorX;
+                        const normY2 = touch2.clientY * scaleFactorY;
                         const dx = normX2 - normX1;
                         const dy = normY2 - normY1;
                         const distance = Math.hypot(dx, dy);
